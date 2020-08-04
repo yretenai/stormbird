@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+
+# CMake Build Environment
+cmake-build-*
+src/cmake
+vcs.xml
+
+.idea
+export_win32.h
+export_clang.h

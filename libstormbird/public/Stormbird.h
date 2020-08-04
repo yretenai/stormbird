@@ -1,0 +1,8 @@
+//
+// Created by yretenai on 2020-08-04.
+//
+
+#ifndef LIBSTORMBIRD_STORMBIRD_H
+#define LIBSTORMBIRD_STORMBIRD_H
+
+#endif //LIBSTORMBIRD_STORMBIRD_H
