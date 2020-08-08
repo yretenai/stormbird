@@ -25,6 +25,10 @@ else(!USE_GNU)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++ -lc++abi")
 endif()
 
+if(CMAKE_SIZEOF_VOID_P LESS 8)
+    message(FATAL_ERROR "Not a 64-bit compiler, pointer width is ${CMAKE_SIZEOF_VOID_P} bytes, expected at least 8.")
+endif()
+
 include(GenerateExportHeader)
 include_directories(vendor)
 

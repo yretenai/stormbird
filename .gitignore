@@ -33,6 +33,8 @@
 
 # CMake Build Environment
 cmake-build-*
+/cmake
+/build
 build
 vcs.xml
 

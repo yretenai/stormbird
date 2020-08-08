@@ -1,6 +1,6 @@
 project(stormbird)
 
-add_library(stormbird SHARED)
+add_library(stormbird SHARED ../vendor/murmurhash/murmur3.c)
 target_compile_definitions(stormbird PRIVATE DRAGON_LIBRARY_NAME="stormbird")
 if(MSVC)
     generate_export_header(stormbird BASE_NAME STORMBIRD DEFINE_NO_DEPRECATED EXPORT_FILE_NAME ${PROJECT_SOURCE_DIR}/autogen/export_win32.h)
@@ -8,4 +8,5 @@ else()
     generate_export_header(stormbird BASE_NAME STORMBIRD DEFINE_NO_DEPRECATED EXPORT_FILE_NAME ${PROJECT_SOURCE_DIR}/autogen/export_clang.h)
 endif()
 target_include_directories(stormbird PUBLIC ${PROJECT_SOURCE_DIR}/public)
+target_include_directories(stormbird PUBLIC ${PROJECT_SOURCE_DIR}/autogen)
 add_subdirectory("private")

@@ -1,3 +1,3 @@
 project(stormbird)
 
-target_sources(stormbird PRIVATE DecimaIndex.cpp)
+target_sources(stormbird PRIVATE DecimaIndex.cpp DecimaCache.cpp DecimaStreamIndex.cpp)
