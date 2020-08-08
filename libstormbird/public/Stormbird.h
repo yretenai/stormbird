@@ -9,4 +9,4 @@
 #include "DecimaIndex.h"
 #include "DecimaStreamIndex.h"
 
-#endif //LIBSTORMBIRD_STORMBIRD_H
+#endif // LIBSTORMBIRD_STORMBIRD_H

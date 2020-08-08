@@ -7,10 +7,13 @@
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        eprintf("Usage: %s path_to_bin_dir", argv[0]);
+        if (argc > 0) {
+            eprintf("Usage: %s path_to_bin_dir\n", argv[0]);
+        } else {
+            eprintf("Usage: cstormbird path_to_bin_dir");
+        }
         return -1;
     }
 
     return 0;
 }
-

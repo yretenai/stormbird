@@ -5,24 +5,25 @@
 #ifndef LIBSTORMBIRD_DECIMACACHE_H
 #define LIBSTORMBIRD_DECIMACACHE_H
 
-#include <string>
-#include <vector>
-#include <map>
-#include <istream>
-#include <cstdint>
-#include <memory>
-#include <standard_dragon/Array.h>
 #include "DecimaIndex.h"
 #include "export.h"
+#include <cstdint>
+#include <istream>
+#include <map>
+#include <memory>
+#include <standard_dragon/Array.h>
+#include <string>
+#include <vector>
 
 // Management class for collecting index files.
 
 namespace stormbird {
     class STORMBIRD_EXPORT DecimaCache {
-    private:
+      private:
         std::map<uint64_t, int32_t> FileMap;
         std::map<uint64_t, std::string> HashMap;
-    public:
+
+      public:
         dragon::Array<std::shared_ptr<DecimaIndex>> Entries;
         DecimaCache();
         ~DecimaCache();
@@ -34,6 +35,6 @@ namespace stormbird {
         bool file_exists(uint64_t hash);
         uint64_t get_hash(std::string hash);
     };
-}
+} // namespace stormbird
 
-#endif //LIBSTORMBIRD_DECIMACACHE_H
+#endif // LIBSTORMBIRD_DECIMACACHE_H

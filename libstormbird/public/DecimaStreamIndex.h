@@ -7,21 +7,23 @@
 
 // .idx files found on HZD PC.
 
+#include "export.h"
 #include <standard_dragon/Array.h>
 #include <string>
-#include "export.h"
 
 namespace stormbird {
     class STORMBIRD_EXPORT DecimaStreamIndex {
-    public:
+      public:
+        typedef uint8_t DecimaStreamHash[0x10];
         typedef struct DECIMA_STREAM_INDEX_ENTRY {
             std::string path;
-            // TODO
+            DecimaStreamHash hash;
+            uint64_t offset;
+            uint64_t size;
         } DecimaStreamIndexEntry;
         dragon::Array<DecimaStreamIndexEntry> Entries;
-        DecimaStreamIndex();
+        DecimaStreamIndex(dragon::Array<char> buffer);
     };
-}
+} // namespace stormbird
 
-
-#endif //LIBSTORMBIRD_DECIMASTREAMINDEX_H
+#endif // LIBSTORMBIRD_DECIMASTREAMINDEX_H

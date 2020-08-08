@@ -8,16 +8,15 @@
 // .bin files found on HZD PC and PS4.
 // TODO: get bin files from DS.
 
-#include <memory>
-#include <standard_dragon/Array.h>
-#include <map>
 #include "DecimaStreamIndex.h"
 #include "export.h"
+#include <map>
+#include <memory>
+#include <standard_dragon/Array.h>
 
 namespace stormbird {
-
     class STORMBIRD_EXPORT DecimaIndex {
-    public:
+      public:
         typedef struct DECIMA_INDEX_ENTRY {
             // TODO
         } DecimaIndexEntry;
@@ -27,9 +26,7 @@ namespace stormbird {
         ~DecimaIndex();
         dragon::Array<char> read_file(uint64_t hash);
         bool file_exists(uint64_t hash);
-
     };
-}
+} // namespace stormbird
 
-
-#endif //LIBSTORMBIRD_DECIMAINDEX_H
+#endif // LIBSTORMBIRD_DECIMAINDEX_H
