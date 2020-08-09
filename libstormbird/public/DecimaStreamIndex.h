@@ -14,15 +14,19 @@
 namespace stormbird {
     class STORMBIRD_EXPORT DecimaStreamIndex {
       public:
-        typedef uint8_t DecimaStreamHash[0x10];
+#pragma pack(push, 1)
+        typedef uint8_t DecimaStreamChecksum[0x10];
         typedef struct DECIMA_STREAM_INDEX_ENTRY {
             std::string path;
-            DecimaStreamHash hash;
+            DecimaStreamChecksum Checksum;
+            uint64_t hash;
             uint64_t offset;
             uint64_t size;
         } DecimaStreamIndexEntry;
+#pragma pack(pop)
         dragon::Array<DecimaStreamIndexEntry> Entries;
-        DecimaStreamIndex(dragon::Array<char> buffer);
+        explicit DecimaStreamIndex(dragon::Array<char> buffer);
+        void dump_info();
     };
 } // namespace stormbird
 
