@@ -1,3 +1,9 @@
 [submodule "standard_dragon"]
 	path = vendor/standard_dragon
 	url = git@github.com:yretenai/standard_dragon.git
+[submodule "murmur3"]
+	path = vendor/murmur3
+	url = git@github.com:PeterScott/murmur3.git
+[submodule "ooz"]
+	path = vendor/ooz
+	url = git@github.com:yretenai/ooz.git

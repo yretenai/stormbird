@@ -1,6 +1,6 @@
 project(stormbird)
 
-add_library(stormbird SHARED ../vendor/murmurhash/murmur3.c)
+add_library(stormbird SHARED ../vendor/murmur3/murmur3.c ../vendor/ooz/kraken.cpp ../vendor/ooz/bitknit.cpp ../vendor/ooz/lzna.cpp)
 target_compile_definitions(stormbird PRIVATE DRAGON_LIBRARY_NAME="stormbird")
 if(MSVC)
     generate_export_header(stormbird BASE_NAME STORMBIRD DEFINE_NO_DEPRECATED EXPORT_FILE_NAME ${PROJECT_SOURCE_DIR}/autogen/export_win32.h)
