@@ -21,19 +21,17 @@ namespace stormbird {
     class STORMBIRD_EXPORT DecimaCache {
       private:
         std::map<uint64_t, int32_t> FileMap;
-        std::map<uint64_t, std::string> HashMap;
 
       public:
         dragon::Array<std::shared_ptr<DecimaIndex>> Entries;
-        DecimaCache();
-        ~DecimaCache();
+        DecimaCache(std::filesystem::path bin_path);
         dragon::Array<char> read_file(std::string path);
         dragon::Array<char> read_file(uint64_t hash);
         // bool write_file(std::string path, dragon::Array<char> data); // TODO
-        // bool write_file(uint64_t path, dragon::Array<char> data); // TODO
-        bool file_exists(std::string hash);
+        // bool write_file(uint64_t hash, dragon::Array<char> data); // TODO
+        bool file_exists(std::string path);
         bool file_exists(uint64_t hash);
-        uint64_t get_hash(std::string hash);
+        static uint64_t get_hash(std::string hash);
     };
 } // namespace stormbird
 

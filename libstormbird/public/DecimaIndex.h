@@ -10,16 +10,16 @@
 
 #include "DecimaStreamIndex.h"
 #include "export.h"
+#include <filesystem>
+#include <istream>
 #include <map>
 #include <memory>
-#include <istream>
-#include <filesystem>
 #include <standard_dragon/Array.h>
 
 namespace stormbird {
     class STORMBIRD_EXPORT DecimaIndex {
       public:
-        #pragma pack(push, 1)
+#pragma pack(push, 1)
         typedef struct DECIMA_INDEX_RECORD {
             int32_t file_id;
             int32_t unknown1;
@@ -50,7 +50,7 @@ namespace stormbird {
         std::shared_ptr<std::ifstream> Stream;
         std::shared_ptr<DecimaStreamIndex> StreamIndex;
         std::map<uint64_t, DecimaIndexRecord> Records;
-        std::map<uint64_t, DecimaIndexBlock> Blocks;
+        dragon::Array<DecimaIndexBlock> Blocks;
         explicit DecimaIndex(const std::filesystem::path& path);
         ~DecimaIndex();
         dragon::Array<char> read_file(uint64_t hash);

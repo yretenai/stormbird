@@ -4,30 +4,32 @@
 
 #include "DecimaCache.h"
 
-stormbird::DecimaCache::DecimaCache() {
+#include <murmur3/murmur3.h>
+#include <utility>
 
+stormbird::DecimaCache::DecimaCache(std::filesystem::path bin_path) {
+    // todo
 }
 
-stormbird::DecimaCache::~DecimaCache() {
-
-}
-
-dragon::Array<char> stormbird::DecimaCache::read_file(std::string path) {
-    return dragon::Array<char>();
-}
+dragon::Array<char> stormbird::DecimaCache::read_file(std::string path) { return read_file(get_hash(std::move(path))); }
 
 dragon::Array<char> stormbird::DecimaCache::read_file(uint64_t hash) {
-    return dragon::Array<char>();
+    if (!file_exists(hash)) {
+        return dragon::Array<char>();
+    }
+
+    return Entries[FileMap[hash]]->read_file(hash);
 }
 
-bool stormbird::DecimaCache::file_exists(std::string hash) {
-    return false;
-}
+bool stormbird::DecimaCache::file_exists(std::string path) { return file_exists(get_hash(std::move(path))); }
 
-bool stormbird::DecimaCache::file_exists(uint64_t hash) {
-    return false;
-}
+bool stormbird::DecimaCache::file_exists(uint64_t hash) { return FileMap.contains(hash); }
 
 uint64_t stormbird::DecimaCache::get_hash(std::string hash) {
-    return 0;
+    uint64_t hashed[2] = {0, 0};
+    std::string stripped_path = hash.substr(hash.find(':') + 1);
+    std::transform(stripped_path.begin(), stripped_path.end(), stripped_path.begin(),
+                   [](unsigned char c) -> unsigned char { return std::tolower(c); });
+    MurmurHash3_x64_128(stripped_path.c_str(), stripped_path.size() + 1, 42, &hashed);
+    return hashed[0];
 }

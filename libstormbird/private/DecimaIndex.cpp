@@ -5,6 +5,7 @@
 #include "DecimaIndex.h"
 
 #include <cstdint>
+#include <ooz/kraken.h>
 #include <standard_dragon/dragon.h>
 
 #define DECIMA_BIN_MAGIC (uint32_t)0x20304050
@@ -20,46 +21,55 @@ stormbird::DecimaIndex::DecimaIndex(const std::filesystem::path& path) {
     }
     Header = buffer.lpcast<DecimaIndexHeader>(&offset);
     dragon::Array<DecimaIndexRecord> record_buffer(Header.record_count, nullptr);
-    dragon::Array<DecimaIndexBlock> block_buffer(Header.block_count, nullptr);
+    Blocks = dragon::Array<DecimaIndexBlock>(Header.block_count, nullptr);
     Stream->read(reinterpret_cast<char*>(record_buffer.data()), record_buffer.byte_size());
-    Stream->read(reinterpret_cast<char*>(block_buffer.data()), block_buffer.byte_size());
-    for(auto record : record_buffer) {
-        if(Records.contains(record.hash)) {
+    Stream->read(reinterpret_cast<char*>(Blocks.data()), Blocks.byte_size());
+    for (auto record : record_buffer) {
+        if (Records.contains(record.hash)) {
             ELOG("Duplicate record? " << std::setfill('0') << std::setw(16) << std::hex << record.hash << std::setw(0) << " defined twice");
         }
         Records[record.hash] = record;
     }
 
-    for(auto block : block_buffer) {
-        Blocks[block.block_offset] = block;
-    }
-
     std::filesystem::path idx_path(path);
     idx_path.replace_extension(".idx");
-    if(std::filesystem::exists(idx_path)) {
+    if (std::filesystem::exists(idx_path)) {
         LOG("Cache Index file found! " << idx_path.filename());
         StreamIndex = std::make_shared<DecimaStreamIndex>(DecimaStreamIndex(dragon::read_file(idx_path)));
     }
 }
 
-stormbird::DecimaIndex::~DecimaIndex() {
-    Stream->close();
-}
+stormbird::DecimaIndex::~DecimaIndex() { Stream->close(); }
 
+// not thread safe.
 dragon::Array<char> stormbird::DecimaIndex::read_file(uint64_t hash) {
-    return dragon::Array<char>();
+    if (!file_exists(hash))
+        return dragon::Array<char>();
+    DecimaIndexRecord record = Records[hash];
+    uint32_t alignment = record.offset / Header.max_block_size;
+    uint32_t last_alignment = (record.offset + record.size) / Header.max_block_size;
+    uint32_t block_count = last_alignment - alignment + 1;
+    dragon::Array<char> dec_block_buffer(block_count * Header.max_block_size, nullptr);
+    for (uint32_t i = 0; i < block_count; ++i) {
+        DecimaIndexBlock block = Blocks[i];
+        Stream->seekg(block.offset, std::ios::beg); // add mutex here probably.
+        dragon::Array<char> block_buffer(block.size, nullptr);
+        Stream->read(reinterpret_cast<char*>(block_buffer.data()), block_buffer.byte_size());
+        Kraken_Decompress(reinterpret_cast<const uint8_t*>(block_buffer.data()), block_buffer.byte_size(),
+                          reinterpret_cast<uint8_t*>(dec_block_buffer.data() + (i * Header.max_block_size)), block.block_size);
+    }
+
+    return dragon::Array<char>(dec_block_buffer.data() + (record.offset % Header.max_block_size), record.size, nullptr);
 }
 
-bool stormbird::DecimaIndex::file_exists(uint64_t hash) {
-    return Records.contains(hash);
-}
+bool stormbird::DecimaIndex::file_exists(uint64_t hash) { return Records.contains(hash); }
 
 void stormbird::DecimaIndex::dump_info() {
-    for(auto pair : Records) {
+    for (auto pair : Records) {
         LOG("Record " << std::setfill('0') << std::setw(16) << std::hex << pair.second.hash);
     }
 
-    if(StreamIndex != nullptr) {
+    if (StreamIndex != nullptr) {
         LOG("DecimaStreamIndex is present");
         StreamIndex->dump_info();
     } else {
