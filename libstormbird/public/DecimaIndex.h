@@ -54,6 +54,7 @@ namespace stormbird {
         explicit DecimaIndex(const std::filesystem::path& path);
         ~DecimaIndex();
         dragon::Array<char> read_file(uint64_t hash);
+        // bool write_file(uint64_t hash, dragon::Array<char> data); // TODO
         bool file_exists(uint64_t hash);
         void dump_info();
     };

@@ -30,7 +30,7 @@ stormbird::DecimaStreamIndex::DecimaStreamIndex(dragon::Array<char> buffer) {
 }
 
 void stormbird::DecimaStreamIndex::dump_info() {
-    for (auto entry : Entries) {
+    for (DecimaStreamIndexEntry entry : Entries) {
         LOG("Entry " << entry.path << " " << std::setfill('0') << std::hex << std::setw(16) << entry.hash);
     }
 }

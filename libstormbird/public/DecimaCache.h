@@ -24,14 +24,16 @@ namespace stormbird {
 
       public:
         dragon::Array<std::shared_ptr<DecimaIndex>> Entries;
-        DecimaCache(std::filesystem::path bin_path);
-        dragon::Array<char> read_file(std::string path);
+        explicit DecimaCache(const std::filesystem::path& bin_path);
+        dragon::Array<char> read_file(const std::string& path);
         dragon::Array<char> read_file(uint64_t hash);
         // bool write_file(std::string path, dragon::Array<char> data); // TODO
         // bool write_file(uint64_t hash, dragon::Array<char> data); // TODO
-        bool file_exists(std::string path);
+        bool file_exists(const std::string& path);
         bool file_exists(uint64_t hash);
-        static uint64_t get_hash(std::string hash);
+        static std::string unwrap_path(const std::string& path);
+        static std::string path_type(const std::string& path);
+        static uint64_t get_hash(const std::string& path);
     };
 } // namespace stormbird
 
