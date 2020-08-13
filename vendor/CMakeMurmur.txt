@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.17)
+
+project(libmurmur3)
+
+add_library(libmurmur3 STATIC murmur3/murmur3.c)
+target_link_libraries(libmurmur3 "-O3")
