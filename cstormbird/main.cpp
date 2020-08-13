@@ -17,6 +17,7 @@ int main(int argc, char** argv) {
         return -1;
     }
     auto decima = DecimaCache(std::filesystem::path(argv[1]));
+
     std::filesystem::path out(argv[2]);
     if(!std::filesystem::exists(out)) {
        std::filesystem::create_directories(out);

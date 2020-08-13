@@ -46,12 +46,12 @@ dragon::Array<char> stormbird::DecimaIndex::read_file(uint64_t hash) {
     if (!file_exists(hash))
         return dragon::Array<char>();
     DecimaIndexRecord record = Records[hash];
-    uint32_t alignment = record.offset / Header.max_block_size;
-    uint32_t last_alignment = (record.offset + record.size) / Header.max_block_size;
-    uint32_t block_count = last_alignment - alignment + 1;
+    int32_t alignment = record.offset / Header.max_block_size;
+    int32_t last_alignment = (record.offset + record.size) / Header.max_block_size;
+    int32_t block_count = last_alignment - alignment + 1;
     dragon::Array<char> dec_block_buffer(block_count * Header.max_block_size + Header.max_block_size, nullptr);
-    for (uint32_t i = 0; i < block_count; ++i) {
-        DecimaIndexBlock block = Blocks[i];
+    for (int32_t i = 0; i < block_count; ++i) {
+        DecimaIndexBlock block = Blocks[i + alignment];
         Stream->seekg(block.offset, std::ios::beg); // add mutex here probably.
         dragon::Array<char> block_buffer(block.size, nullptr);
         Stream->read(reinterpret_cast<char*>(block_buffer.data()), block_buffer.byte_size());
