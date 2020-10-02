@@ -19,13 +19,14 @@ stormbird::DecimaStreamIndex::DecimaStreamIndex(dragon::Array<char> buffer) {
 
     Entries = dragon::Array<DecimaStreamIndexEntry>(buffer.lpcast<int32_t>(&offset), nullptr);
 
-    for (int32_t i = 0; i < Entries.size(); i++) {
+    for (size_t i = 0; i < Entries.size(); i++) {
         int32_t length = buffer.lpcast<int32_t>(&offset);
         Entries[i].path = std::string(buffer.lpslice(&offset, length).data(), length);
         std::copy_n(buffer.lpslice(&offset, 0x10).data(), 0x10, Entries[i].Checksum);
         Entries[i].offset = buffer.lpcast<uint64_t>(&offset);
         Entries[i].size = buffer.lpcast<uint64_t>(&offset);
         Entries[i].hash = stormbird::DecimaCache::get_hash(Entries[i].path);
+        Table[Entries[i].hash] = i;
     }
 }
 

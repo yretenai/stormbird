@@ -10,6 +10,7 @@
 #include "export.h"
 #include <standard_dragon/Array.h>
 #include <string>
+#include <map>
 
 namespace stormbird {
     class STORMBIRD_EXPORT DecimaStreamIndex {
@@ -25,6 +26,7 @@ namespace stormbird {
         } DecimaStreamIndexEntry;
 #pragma pack(pop)
         dragon::Array<DecimaStreamIndexEntry> Entries;
+        std::map<uint64_t, size_t> Table;
         explicit DecimaStreamIndex(dragon::Array<char> buffer);
         void dump_info();
     };

@@ -22,7 +22,10 @@ stormbird::DecimaCache::DecimaCache(const std::filesystem::path& bin_path) {
         Entries[i] = std::make_shared<DecimaIndex>(path);
         for (std::pair<uint64_t, DecimaIndex::DecimaIndexRecord> pair : Entries[i]->Records) {
             if (FileMap.contains(pair.first)) {
-                ELOG("Duplicate record? " << std::setfill('0') << std::setw(16) << std::hex << pair.first << std::setw(0) << " defined twice");
+                // FGRWin and Patch have 0, everything else has 32758
+                if (Entries[FileMap[pair.first]]->Header.load_priority <= Entries[i]->Header.load_priority) {
+                    continue;
+                }
             }
             FileMap[pair.first] = i;
         }
