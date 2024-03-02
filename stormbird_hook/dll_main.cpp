@@ -22,11 +22,7 @@ auto WINAPI
 HIDDllMain(HINSTANCE hInst, DWORD dwReason, [[maybe_unused]] LPVOID lpReserved) -> BOOL {
 	if (dwReason == DLL_PROCESS_ATTACH) {
 		h_this = hInst;
-		std::array<wchar_t, MAX_PATH + 1> system32 {};
-		GetSystemDirectoryW(system32.data(), static_cast<UINT>(system32.size()));
-		auto hid_dll = std::filesystem::path(system32.data()) / "hid.dll";
-
-		h_library = LoadLibraryW(reinterpret_cast<LPCWSTR>(hid_dll.c_str()));
+		h_library = LoadLibraryA("C:\\Windows\\System32\\hid.dll");
 		if (h_library == nullptr) {
 			return 0;
 		}
@@ -91,9 +87,9 @@ HIDDllMain(HINSTANCE hInst, DWORD dwReason, [[maybe_unused]] LPVOID lpReserved) 
 auto APIENTRY
 DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) -> BOOL {
 	if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-		std::call_once(init, [&]() { stormbird_hook::runtime::init(); });
+		std::call_once(init, [&]() { rivet_hook::runtime::init(); });
 	} else if (ul_reason_for_call == DLL_PROCESS_DETACH) {
-		std::call_once(fini, [&]() { stormbird_hook::runtime::fini(); });
+		std::call_once(fini, [&]() { rivet_hook::runtime::fini(); });
 	}
 
 	return HIDDllMain(hModule, ul_reason_for_call, lpReserved);
