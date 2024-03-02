@@ -1,0 +1,1 @@
+option('lib_only', type: 'boolean', value: false, description: 'only build the library')
