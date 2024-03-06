@@ -15,7 +15,7 @@ if host_machine.system() == 'windows'
 		error(asm_compiler + ' not available')
 	endif
 
-	rivet_hook = shared_library('rivet_hook', [
+	stormbird_hook = shared_library('stormbird_hook', [
 			'dll_main.cpp',
 			'trampoline.' + ext,
 			'runtime/runtime.cpp'
